@@ -1,0 +1,32 @@
+# Core FastAPI and Web Framework
+fastapi==0.129.0
+uvicorn[standard]==0.41.0
+python-multipart==0.0.22
+pydantic==2.12.5
+
+# Database
+sqlalchemy==2.0.29
+# sqlite3 is built-in to Python, no need to install
+
+# Vector Search and Embeddings
+faiss-cpu==1.8.0
+numpy==1.24.3
+
+# File Processing
+pypdf==4.3.1
+pytesseract==0.3.10
+pillow==10.1.0
+
+# LLM and Embeddings
+openai==1.45.1
+
+# Utilities
+python-dotenv==1.0.1
+
+# Development and Testing (optional)
+pytest==7.4.3
+pytest-asyncio==0.23.2
+httpx==0.25.2
+
+# Logging
+python-json-logger==2.0.7

@@ -1,0 +1,6 @@
+# Data directory for RAG Engine
+# This folder stores:
+# - vector.index: FAISS vector index
+# - database.db: SQLite database
+# - uploads/: Temporary uploaded files
+# - logs/: Application logs
