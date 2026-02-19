@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  rag-engine-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-engine-prod
+    ports:
+      - "8000:8000"
+    volumes:
+      # Only mount data directory, NOT app (for security)
+      - rag-data:/app/data
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ENVIRONMENT=production
+      - PYTHONUNBUFFERED=1
+    networks:
+      - rag-network-prod
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # Limit resources
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  rag-data:
+    driver: local
+
+networks:
+  rag-network-prod:
+    driver: bridge

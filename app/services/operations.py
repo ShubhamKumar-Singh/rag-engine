@@ -119,6 +119,89 @@ class UploadService:
                 "success": False,
                 "message": f"Error processing file: {str(e)}"
             }
+    
+    @staticmethod
+    def process_text_upload(text_content: str, filename: str, db: Session) -> dict:
+        """
+        Process uploaded text: chunk, embed, and store
+        
+        Args:
+            text_content: Text content as string
+            filename: Name for the text document
+            db: Database session
+            
+        Returns:
+            Dictionary with processing results
+        """
+        try:
+            # Validate text
+            if not text_content or not text_content.strip():
+                return {"success": False, "message": "Text content cannot be empty"}
+            
+            file_type = "text"
+            logger.info(f"Processing text upload: {filename}")
+            
+            # Create document record
+            document = Document(
+                file_name=filename,
+                file_type=file_type,
+                original_text=text_content,
+                chunk_count=0
+            )
+            db.add(document)
+            db.commit()
+            db.refresh(document)
+            logger.info(f"Created document record: id={document.id}")
+            
+            # Chunk text
+            chunks = chunk_text(text_content)
+            logger.info(f"Created {len(chunks)} chunks from text")
+            
+            # Generate embeddings
+            embedding_service = get_embedding_service()
+            embeddings = embedding_service.get_embeddings_as_numpy(chunks)
+            logger.info(f"Generated embeddings: shape {embeddings.shape}")
+            
+            # Store in FAISS
+            faiss_store = get_faiss_store()
+            chunk_doc_ids = [f"{document.id}_{i}" for i in range(len(chunks))]
+            faiss_ids = faiss_store.add_vectors(embeddings, chunk_doc_ids)
+            
+            # Store chunks in database
+            for i, (chunk_text_content, faiss_id) in enumerate(zip(chunks, faiss_ids)):
+                chunk = Chunk(
+                    document_id=document.id,
+                    chunk_index=i,
+                    chunk_text=chunk_text_content,
+                    faiss_id=str(faiss_id)
+                )
+                db.add(chunk)
+            
+            # Update document chunk count
+            document.chunk_count = len(chunks)
+            db.commit()
+            
+            # Save FAISS index
+            faiss_store.save_index()
+            
+            logger.info(f"Text upload completed: {filename} ({len(chunks)} chunks, {len(embeddings)} vectors)")
+            
+            return {
+                "success": True,
+                "message": f"Successfully processed {filename}",
+                "filename": filename,
+                "file_type": file_type,
+                "chunks_created": len(chunks),
+                "vectors_stored": len(embeddings)
+            }
+        
+        except Exception as e:
+            logger.error(f"Error processing text upload: {str(e)}")
+            db.rollback()
+            return {
+                "success": False,
+                "message": f"Error processing text: {str(e)}"
+            }
 
 
 class QueryService:

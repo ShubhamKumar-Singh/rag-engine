@@ -18,6 +18,15 @@ class UploadResponse(BaseModel):
         from_attributes = True
 
 
+class TextUploadRequest(BaseModel):
+    """Request body for text upload"""
+    text: str = Field(..., min_length=1, max_length=100000)
+    description: Optional[str] = Field(None, max_length=255)
+    
+    class Config:
+        from_attributes = True
+
+
 class QueryRequest(BaseModel):
     """Request body for asking questions"""
     question: str = Field(..., min_length=1, max_length=1000)

@@ -2,13 +2,34 @@ version: '3.8'
 
 services:
   rag-engine:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-engine-app
     ports:
       - "8000:8000"
     volumes:
+      # Mount data directory for persistence
       - ./data:/app/data
+      # Mount app for development hot-reload (comment out for production)
       - ./app:/app/app
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - ENVIRONMENT=development
+      - PYTHONUNBUFFERED=1
     command: python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - rag-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.example.description=RAG Engine API Server"
+
+networks:
+  rag-network:
+    driver: bridge
