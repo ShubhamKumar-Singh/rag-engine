@@ -82,4 +82,5 @@ class HealthCheck(BaseModel):
     message: str
     database_initialized: bool
     faiss_initialized: bool
-    openai_configured: bool
+    embeddings_backend: str
+    llm_backend: str

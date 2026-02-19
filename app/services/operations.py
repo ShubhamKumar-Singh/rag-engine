@@ -309,46 +309,29 @@ class QueryService:
             Generated answer
         """
         try:
-            from openai import OpenAI
-            from app.core.config import OPENAI_API_KEY
+            # Use local transformers pipeline for generation
+            from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
             
-            if not OPENAI_API_KEY:
-                logger.warning("OpenAI API key not configured")
-                return "OpenAI API not configured. Unable to generate answer."
-            
-            client = OpenAI(api_key=OPENAI_API_KEY)
-            
-            # Limit context length
+            # Truncate context to max allowed length
             context = context[:MAX_CONTEXT_LENGTH]
-            
-            prompt = f"""Answer the question based strictly on the provided context. 
-If the answer cannot be found in the context, say so.
 
-Context:
-{context}
+            prompt = f"""Answer the question based strictly on the provided context. If the answer cannot be found in the context, say so.\n\nContext:\n{context}\n\nQuestion: {question}\n\nAnswer:"""
 
-Question: {question}
+            # Lazy-load model and tokenizer (small seq2seq model recommended for CPU)
+            model_name = LLM_MODEL
+            try:
+                tokenizer = AutoTokenizer.from_pretrained(model_name)
+                model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+                gen = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
+            except Exception as e:
+                logger.error(f"Failed to load local LLM model '{model_name}': {e}")
+                return "Local LLM model not available. Unable to generate answer."
 
-Answer:"""
-            
-            response = client.chat.completions.create(
-                model=LLM_MODEL,
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant that answers questions based on provided documents."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=LLM_TEMPERATURE,
-                max_tokens=500
-            )
-            
-            answer = response.choices[0].message.content
-            logger.info("Generated answer using OpenAI API")
+            outputs = gen(prompt, max_length=512, do_sample=False)
+            answer = outputs[0]["generated_text"] if isinstance(outputs, list) and outputs else str(outputs)
+            logger.info("Generated answer using local LLM model")
             return answer
-        
-        except ImportError:
-            logger.error("OpenAI client not available")
-            return "OpenAI client not configured. Unable to generate answer."
-        
+
         except Exception as e:
             logger.error(f"Error generating answer: {str(e)}")
             return f"Error generating answer: {str(e)}"

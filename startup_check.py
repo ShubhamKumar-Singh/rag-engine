@@ -26,7 +26,8 @@ def check_imports():
         'sqlalchemy': 'SQLAlchemy',
         'faiss': 'FAISS',
         'numpy': 'NumPy',
-        'openai': 'OpenAI',
+        'sentence_transformers': 'sentence-transformers',
+        'transformers': 'transformers',
         'pypdf': 'PyPDF',
         'PIL': 'Pillow',
         'pydantic': 'Pydantic'
@@ -45,21 +46,15 @@ def check_imports():
 
 
 def check_env_file():
-    """Check if .env file exists and has OPENAI_API_KEY"""
+    """Check if .env file exists (no API key required for local models)"""
     env_path = Path(__file__).resolve().parent / ".env"
-    
+
     if not env_path.exists():
         print("❌ .env file not found")
-        print("   Create .env with: OPENAI_API_KEY=sk_your_key_here")
+        print("   Create .env from .env.docker or set required values")
         return False
-    
-    with open(env_path) as f:
-        content = f.read()
-        if 'OPENAI_API_KEY' not in content or 'your_api_key_here' in content:
-            print("❌ OPENAI_API_KEY not configured in .env")
-            return False
-    
-    print("✅ .env file configured with OPENAI_API_KEY")
+
+    print("✅ .env file found")
     return True
 
 
@@ -115,7 +110,7 @@ def main():
         print("❌ Some checks failed. Please fix the issues above.\n")
         print("Installation steps:")
         print("  1. pip install -r requirements.txt")
-        print("  2. Create .env file with OPENAI_API_KEY")
+        print("  2. Create .env file with local model settings (see .env.docker)")
         print("  3. Run this check again\n")
         sys.exit(1)
     

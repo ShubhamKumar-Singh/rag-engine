@@ -6,7 +6,6 @@ from app.core.logging_config import logger
 from app.db.database import init_db
 from app.services.faiss_store import get_faiss_store
 from app.services.embedding import get_embedding_service
-from app.core.config import OPENAI_API_KEY
 
 # Initialize database and services
 try:
@@ -65,6 +64,8 @@ def detailed_health():
     """Detailed health check with system status"""
     faiss_stats = {}
     embedding_configured = False
+    embeddings_backend = "local"
+    llm_backend = "local"
     
     try:
         faiss_store = get_faiss_store()
@@ -83,7 +84,8 @@ def detailed_health():
         "database": "initialized",
         "faiss": faiss_stats,
         "embeddings_configured": embedding_configured,
-        "openai_configured": bool(OPENAI_API_KEY),
+        "embeddings_backend": embeddings_backend,
+        "llm_backend": llm_backend,
         "endpoints": {
             "upload": "/upload (POST)",
             "ask": "/ask (POST)",
