@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import sqlite3
 
 # Load environment variables
 load_dotenv()
@@ -92,6 +93,24 @@ class Settings:
 
     DATABASE_PATH: Path = DATA_DIR / "database.db"
 
+    # Quick integrity check: if the database file exists but is corrupted,
+    # switch to a recovered DB path to allow the app to start.
+    try:
+        if DATABASE_PATH.exists():
+            conn = sqlite3.connect(str(DATABASE_PATH))
+            cur = conn.cursor()
+            cur.execute("PRAGMA integrity_check;")
+            row = cur.fetchone()
+            conn.close()
+            if row and row[0] != 'ok':
+                RECOVERED = DATA_DIR / "database_recovered.db"
+                print(f"WARNING: {DATABASE_PATH} appears corrupted ({row}). Using {RECOVERED} instead.")
+                DATABASE_PATH = RECOVERED
+    except Exception as _:
+        RECOVERED = DATA_DIR / "database_recovered.db"
+        print(f"Warning checking database integrity: switching to {RECOVERED}")
+        DATABASE_PATH = RECOVERED
+
     # ==============================
     # Chunking Configuration
     # ==============================
@@ -162,3 +181,46 @@ class Settings:
 
 # Create a global settings object
 settings = Settings()
+
+# Expose common settings as module-level constants for backward compatibility
+BASE_DIR = settings.BASE_DIR
+DATA_DIR = settings.DATA_DIR
+UPLOADS_DIR = settings.UPLOADS_DIR
+
+ENVIRONMENT = settings.ENVIRONMENT
+DEBUG = settings.DEBUG
+
+API_TITLE = settings.API_TITLE
+API_VERSION = settings.API_VERSION
+API_DESCRIPTION = settings.API_DESCRIPTION
+
+EMBEDDINGS_MODEL = settings.EMBEDDINGS_MODEL
+EMBEDDINGS_BATCH_SIZE = settings.EMBEDDINGS_BATCH_SIZE
+
+LLM_MODEL = settings.LLM_MODEL
+LLM_TEMPERATURE = settings.LLM_TEMPERATURE
+MAX_CONTEXT_LENGTH = settings.MAX_CONTEXT_LENGTH
+
+FAISS_INDEX_PATH = settings.FAISS_INDEX_PATH
+FAISS_DIMENSION = settings.FAISS_DIMENSION
+FAISS_INDEX_TYPE = settings.FAISS_INDEX_TYPE
+FAISS_NLIST = settings.FAISS_NLIST
+
+DATABASE_PATH = settings.DATABASE_PATH
+
+CHUNK_SIZE = settings.CHUNK_SIZE
+CHUNK_OVERLAP = settings.CHUNK_OVERLAP
+MAX_CHUNKS_PER_DOCUMENT = settings.MAX_CHUNKS_PER_DOCUMENT
+
+TOP_K = settings.TOP_K
+SIMILARITY_THRESHOLD = settings.SIMILARITY_THRESHOLD
+
+MAX_FILE_SIZE = settings.MAX_FILE_SIZE
+ALLOWED_FILE_TYPES = settings.ALLOWED_FILE_TYPES
+
+TESSERACT_CMD = settings.TESSERACT_CMD
+
+LOG_LEVEL = settings.LOG_LEVEL
+LOG_FILE_PATH = settings.LOG_FILE_PATH
+
+RATE_LIMIT_PER_MINUTE = settings.RATE_LIMIT_PER_MINUTE

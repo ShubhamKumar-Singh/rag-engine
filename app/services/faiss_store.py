@@ -4,7 +4,7 @@ import faiss
 import numpy as np
 from typing import List, Tuple
 from pathlib import Path
-from app.core.config import FAISS_INDEX_PATH, FAISS_DIMENSION
+from app.core.config import FAISS_INDEX_PATH, FAISS_DIMENSION, FAISS_INDEX_TYPE, FAISS_NLIST
 from app.core.logging_config import logger
 
 
@@ -26,9 +26,22 @@ class FAISSStore:
     def create_index(self):
         """Create a new FAISS index"""
         try:
-            # Create a flat index (simple brute-force search)
-            self.index = faiss.IndexFlatL2(self.dimension)
-            logger.info(f"Created new FAISS index with dimension {self.dimension}")
+            # Create an index depending on configured type
+            if FAISS_INDEX_TYPE and FAISS_INDEX_TYPE.lower() == "ivf":
+                # IVF requires a quantizer and an nlist parameter and must be trained
+                quantizer = faiss.IndexFlatL2(self.dimension)
+                nlist = int(FAISS_NLIST)
+                self.index = faiss.IndexIVFFlat(quantizer, self.dimension, nlist, faiss.METRIC_L2)
+                # default nprobe can be tuned at search time; set a sensible default
+                try:
+                    self.index.nprobe = min(10, nlist)
+                except Exception:
+                    pass
+                logger.info(f"Created new FAISS IndexIVFFlat (nlist={nlist}) with dimension {self.dimension}")
+            else:
+                # Create a flat index (simple brute-force search)
+                self.index = faiss.IndexFlatL2(self.dimension)
+                logger.info(f"Created new FAISS IndexFlatL2 with dimension {self.dimension}")
         except Exception as e:
             logger.error(f"Error creating FAISS index: {str(e)}")
             raise
@@ -56,6 +69,33 @@ class FAISSStore:
             
             # Add vectors
             vectors = np.asarray(vectors, dtype=np.float32)
+
+            # If using an IVF index it needs to be trained before adding vectors
+            try:
+                is_ivf = hasattr(self.index, "is_trained") and not getattr(self.index, "is_trained") is None
+            except Exception:
+                is_ivf = False
+
+            # If index is IVF and there are fewer training vectors than nlist, fallback to flat
+            try:
+                is_ivf_type = self.index.__class__.__name__.lower().startswith("indexivf")
+            except Exception:
+                is_ivf_type = False
+
+            n_training = vectors.shape[0]
+            nlist = int(FAISS_NLIST)
+            if is_ivf_type and n_training < nlist and self.index.ntotal == 0:
+                logger.warning(f"Not enough vectors ({n_training}) to train IVF (nlist={nlist}); falling back to IndexFlatL2 for now")
+                self.index = faiss.IndexFlatL2(self.dimension)
+
+            if hasattr(self.index, "is_trained") and not self.index.is_trained:
+                # Train with the provided vectors (acceptable if you have >= nlist vectors)
+                try:
+                    self.index.train(vectors)
+                    logger.info("Trained FAISS IVF index before adding vectors")
+                except Exception as e:
+                    logger.warning(f"Failed to train IVF index: {e}; attempting to add vectors anyway")
+
             self.index.add(vectors)
             
             # Map indices to doc IDs

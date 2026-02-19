@@ -103,7 +103,52 @@ async def upload_text(request: TextUploadRequest, db: Session = Depends(get_db))
             success=False,
             filename=request.description or "text_upload.txt",
             file_type="text",
-            message=f"Error: {str(e)}",
+            message=f"Error: {repr(e)}",
+            chunks_created=0,
+            vectors_stored=0
+        )
+
+
+@router.post("/text/raw", response_model=UploadResponse)
+async def upload_text_raw(raw_text: str = File(...), filename: str = "text_upload.txt", db: Session = Depends(get_db)):
+    """
+    Upload plain text with content-type `text/plain` or as form field `file`.
+    Use this when sending multi-line text without JSON escaping.
+    """
+    try:
+        # Some clients send as a form 'file' field; ensure it's a str
+        if isinstance(raw_text, bytes):
+            raw_text = raw_text.decode('utf-8', errors='ignore')
+
+        logger.info(f"Received raw text upload request: {filename}")
+        result = UploadService.process_text_upload(raw_text, filename, db)
+
+        if not result["success"]:
+            return UploadResponse(
+                success=False,
+                filename=filename,
+                file_type="text",
+                message=result["message"],
+                chunks_created=0,
+                vectors_stored=0
+            )
+
+        return UploadResponse(
+            success=True,
+            filename=result["filename"],
+            file_type=result["file_type"],
+            message=result["message"],
+            chunks_created=result["chunks_created"],
+            vectors_stored=result["vectors_stored"]
+        )
+
+    except Exception as e:
+        logger.error(f"Error in raw text upload endpoint: {repr(e)}")
+        return UploadResponse(
+            success=False,
+            filename=filename,
+            file_type="text",
+            message=f"Error: {repr(e)}",
             chunks_created=0,
             vectors_stored=0
         )

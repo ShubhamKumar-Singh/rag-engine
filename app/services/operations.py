@@ -113,11 +113,13 @@ class UploadService:
                     os.unlink(tmp_path)
         
         except Exception as e:
-            logger.error(f"Error processing upload: {str(e)}")
+            import traceback
+            logger.error(f"Error processing upload: {repr(e)}")
+            logger.debug(traceback.format_exc())
             db.rollback()
             return {
                 "success": False,
-                "message": f"Error processing file: {str(e)}"
+                "message": f"Error processing file: {repr(e)}"
             }
     
     @staticmethod
@@ -196,11 +198,13 @@ class UploadService:
             }
         
         except Exception as e:
-            logger.error(f"Error processing text upload: {str(e)}")
+            import traceback
+            logger.error(f"Error processing text upload: {repr(e)}")
+            logger.debug(traceback.format_exc())
             db.rollback()
             return {
                 "success": False,
-                "message": f"Error processing text: {str(e)}"
+                "message": f"Error processing text: {repr(e)}"
             }
 
 
