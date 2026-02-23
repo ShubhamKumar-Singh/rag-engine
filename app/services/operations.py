@@ -254,25 +254,28 @@ class QueryService:
                     try:
                         doc_id_parts = doc_id.rsplit('_', 1)
                         doc_num = int(doc_id_parts[0])
-                        
-                        # Get document and chunk info
+                        chunk_idx = int(doc_id_parts[1]) if len(doc_id_parts) > 1 else None
+
+                        # Get document and the specific chunk by chunk_index
                         document = db.query(Document).filter(Document.id == doc_num).first()
-                        chunks = db.query(Chunk).filter(
-                            Chunk.document_id == doc_num
-                        ).all()
-                        
-                        if chunks and i < len(chunks):
-                            chunk = chunks[i]
+                        chunk = None
+                        if chunk_idx is not None:
+                            chunk = db.query(Chunk).filter(
+                                Chunk.document_id == doc_num,
+                                Chunk.chunk_index == chunk_idx
+                            ).first()
+
+                        if chunk:
                             # Convert L2 distance to similarity score (0-1 range)
                             similarity = 1 / (1 + distance)
-                            
+
                             chunks_info.append({
                                 "document": document.file_name if document else "Unknown",
                                 "chunk_index": chunk.chunk_index,
                                 "text": chunk.chunk_text,
                                 "similarity": float(similarity)
                             })
-                            
+
                             context_text += f"\n{chunk.chunk_text}"
                     except (ValueError, IndexError) as e:
                         logger.warning(f"Error parsing doc_id {doc_id}: {str(e)}")

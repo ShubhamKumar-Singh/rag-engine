@@ -1,0 +1,551 @@
+{
+  "electronics": {
+    "phones": [
+      {
+        "id": "ph1001",
+        "name": "AlphaPhone 1",
+        "price": 9999,
+        "brand": "Alpha",
+        "description": "4GB RAM 64GB storage smartphone",
+        "specifications": {
+          "ram": "4GB",
+          "storage": "64GB"
+        }
+      },
+      {
+        "id": "ph1002",
+        "name": "AlphaPhone 2",
+        "price": 10999,
+        "brand": "Alpha",
+        "description": "6GB RAM 128GB storage smartphone",
+        "specifications": {
+          "ram": "6GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "ph1003",
+        "name": "AlphaPhone 3",
+        "price": 12999,
+        "brand": "Alpha",
+        "description": "8GB RAM 128GB storage smartphone",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "ph1004",
+        "name": "BetaPhone 4",
+        "price": 14999,
+        "brand": "Beta",
+        "description": "4GB RAM 64GB budget smartphone",
+        "specifications": {
+          "ram": "4GB",
+          "storage": "64GB"
+        }
+      },
+      {
+        "id": "ph1005",
+        "name": "BetaPhone 5",
+        "price": 16999,
+        "brand": "Beta",
+        "description": "6GB RAM 128GB midrange smartphone",
+        "specifications": {
+          "ram": "6GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "ph1006",
+        "name": "GammaPhone 6",
+        "price": 18999,
+        "brand": "Gamma",
+        "description": "8GB RAM 256GB performance smartphone",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "256GB"
+        }
+      },
+      {
+        "id": "ph1007",
+        "name": "GammaPhone 7",
+        "price": 20999,
+        "brand": "Gamma",
+        "description": "12GB RAM 256GB flagship smartphone",
+        "specifications": {
+          "ram": "12GB",
+          "storage": "256GB"
+        }
+      },
+      {
+        "id": "ph1008",
+        "name": "DeltaPhone 8",
+        "price": 8999,
+        "brand": "Delta",
+        "description": "3GB RAM 32GB entry smartphone",
+        "specifications": {
+          "ram": "3GB",
+          "storage": "32GB"
+        }
+      },
+      {
+        "id": "ph1009",
+        "name": "DeltaPhone 9",
+        "price": 11999,
+        "brand": "Delta",
+        "description": "4GB RAM 64GB affordable smartphone",
+        "specifications": {
+          "ram": "4GB",
+          "storage": "64GB"
+        }
+      },
+      {
+        "id": "ph1010",
+        "name": "NovaPhone 10",
+        "price": 22999,
+        "brand": "Nova",
+        "description": "8GB RAM 256GB premium smartphone",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "256GB"
+        }
+      },
+      {
+        "id": "ph1011",
+        "name": "AlphaPhone 11",
+        "price": 13999,
+        "brand": "Alpha",
+        "description": "6GB RAM 128GB smartphone",
+        "specifications": {
+          "ram": "6GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "ph1012",
+        "name": "AlphaPhone 12",
+        "price": 15999,
+        "brand": "Alpha",
+        "description": "8GB RAM 256GB smartphone",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "256GB"
+        }
+      },
+      {
+        "id": "ph1013",
+        "name": "BetaPhone 13",
+        "price": 17999,
+        "brand": "Beta",
+        "description": "8GB RAM 128GB smartphone",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "ph1014",
+        "name": "BetaPhone 14",
+        "price": 19999,
+        "brand": "Beta",
+        "description": "12GB RAM 256GB smartphone",
+        "specifications": {
+          "ram": "12GB",
+          "storage": "256GB"
+        }
+      },
+      {
+        "id": "ph1015",
+        "name": "GammaPhone 15",
+        "price": 24999,
+        "brand": "Gamma",
+        "description": "12GB RAM 512GB flagship",
+        "specifications": {
+          "ram": "12GB",
+          "storage": "512GB"
+        }
+      },
+      {
+        "id": "ph1016",
+        "name": "NovaPhone 16",
+        "price": 26999,
+        "brand": "Nova",
+        "description": "8GB RAM 256GB 5G phone",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "256GB"
+        }
+      },
+      {
+        "id": "ph1017",
+        "name": "NovaPhone 17",
+        "price": 28999,
+        "brand": "Nova",
+        "description": "12GB RAM 512GB 5G phone",
+        "specifications": {
+          "ram": "12GB",
+          "storage": "512GB"
+        }
+      },
+      {
+        "id": "ph1018",
+        "name": "DeltaPhone 18",
+        "price": 9999,
+        "brand": "Delta",
+        "description": "4GB RAM 64GB smartphone",
+        "specifications": {
+          "ram": "4GB",
+          "storage": "64GB"
+        }
+      },
+      {
+        "id": "ph1019",
+        "name": "DeltaPhone 19",
+        "price": 13999,
+        "brand": "Delta",
+        "description": "6GB RAM 128GB smartphone",
+        "specifications": {
+          "ram": "6GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "ph1020",
+        "name": "GammaPhone 20",
+        "price": 21999,
+        "brand": "Gamma",
+        "description": "8GB RAM 256GB phone",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "256GB"
+        }
+      },
+      {
+        "id": "ph1021",
+        "name": "AlphaPhone 21",
+        "price": 14999,
+        "brand": "Alpha",
+        "description": "6GB RAM 128GB phone",
+        "specifications": {
+          "ram": "6GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "ph1022",
+        "name": "AlphaPhone 22",
+        "price": 15999,
+        "brand": "Alpha",
+        "description": "8GB RAM 128GB phone",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "ph1023",
+        "name": "BetaPhone 23",
+        "price": 17999,
+        "brand": "Beta",
+        "description": "8GB RAM 256GB phone",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "256GB"
+        }
+      },
+      {
+        "id": "ph1024",
+        "name": "GammaPhone 24",
+        "price": 19999,
+        "brand": "Gamma",
+        "description": "12GB RAM 256GB phone",
+        "specifications": {
+          "ram": "12GB",
+          "storage": "256GB"
+        }
+      },
+      {
+        "id": "ph1025",
+        "name": "NovaPhone 25",
+        "price": 29999,
+        "brand": "Nova",
+        "description": "12GB RAM 512GB premium phone",
+        "specifications": {
+          "ram": "12GB",
+          "storage": "512GB"
+        }
+      }
+    ],
+    "laptops": [
+      {
+        "id": "lp2001",
+        "name": "GammaBook 1",
+        "price": 49999,
+        "brand": "Gamma",
+        "description": "8GB RAM 512GB SSD laptop",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "512GB"
+        }
+      },
+      {
+        "id": "lp2002",
+        "name": "GammaBook 2",
+        "price": 59999,
+        "brand": "Gamma",
+        "description": "16GB RAM 512GB SSD laptop",
+        "specifications": {
+          "ram": "16GB",
+          "storage": "512GB"
+        }
+      },
+      {
+        "id": "lp2003",
+        "name": "AlphaBook 3",
+        "price": 64999,
+        "brand": "Alpha",
+        "description": "16GB RAM 1TB SSD laptop",
+        "specifications": {
+          "ram": "16GB",
+          "storage": "1TB"
+        }
+      },
+      {
+        "id": "lp2004",
+        "name": "BetaBook 4",
+        "price": 54999,
+        "brand": "Beta",
+        "description": "8GB RAM 1TB HDD laptop",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "1TB"
+        }
+      },
+      {
+        "id": "lp2005",
+        "name": "NovaBook 5",
+        "price": 79999,
+        "brand": "Nova",
+        "description": "32GB RAM 1TB SSD laptop",
+        "specifications": {
+          "ram": "32GB",
+          "storage": "1TB"
+        }
+      }
+    ],
+    "tablets": [
+      {
+        "id": "tb3001",
+        "name": "TabOne 1",
+        "price": 15999,
+        "brand": "Nova",
+        "description": "4GB RAM 64GB tablet",
+        "specifications": {
+          "ram": "4GB",
+          "storage": "64GB"
+        }
+      },
+      {
+        "id": "tb3002",
+        "name": "TabOne 2",
+        "price": 18999,
+        "brand": "Nova",
+        "description": "6GB RAM 128GB tablet",
+        "specifications": {
+          "ram": "6GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "tb3003",
+        "name": "AlphaTab 3",
+        "price": 20999,
+        "brand": "Alpha",
+        "description": "8GB RAM 128GB tablet",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "128GB"
+        }
+      },
+      {
+        "id": "tb3004",
+        "name": "BetaTab 4",
+        "price": 17999,
+        "brand": "Beta",
+        "description": "6GB RAM 64GB tablet",
+        "specifications": {
+          "ram": "6GB",
+          "storage": "64GB"
+        }
+      },
+      {
+        "id": "tb3005",
+        "name": "GammaTab 5",
+        "price": 22999,
+        "brand": "Gamma",
+        "description": "8GB RAM 256GB tablet",
+        "specifications": {
+          "ram": "8GB",
+          "storage": "256GB"
+        }
+      }
+    ]
+  },
+  "footwear": [
+    {
+      "id": "fw4001",
+      "name": "Sport Runner 1",
+      "price": 1999,
+      "brand": "FastFeet",
+      "description": "Running shoes",
+      "specifications": {
+        "size": "8"
+      }
+    },
+    {
+      "id": "fw4002",
+      "name": "Sport Runner 2",
+      "price": 2499,
+      "brand": "FastFeet",
+      "description": "Running shoes",
+      "specifications": {
+        "size": "9"
+      }
+    },
+    {
+      "id": "fw4003",
+      "name": "Urban Sneaker 3",
+      "price": 2999,
+      "brand": "UrbanWalk",
+      "description": "Casual sneakers",
+      "specifications": {
+        "size": "10"
+      }
+    },
+    {
+      "id": "fw4004",
+      "name": "Formal Step 4",
+      "price": 3499,
+      "brand": "EliteWear",
+      "description": "Formal shoes",
+      "specifications": {
+        "size": "9"
+      }
+    },
+    {
+      "id": "fw4005",
+      "name": "Trail Master 5",
+      "price": 3999,
+      "brand": "MountainGo",
+      "description": "Hiking shoes",
+      "specifications": {
+        "size": "8"
+      }
+    }
+  ],
+  "clothes": [
+    {
+      "id": "cl5001",
+      "name": "Classic Tee 1",
+      "price": 499,
+      "brand": "Basics",
+      "description": "Cotton t-shirt",
+      "specifications": {
+        "size": "M"
+      }
+    },
+    {
+      "id": "cl5002",
+      "name": "Classic Tee 2",
+      "price": 599,
+      "brand": "Basics",
+      "description": "Cotton t-shirt",
+      "specifications": {
+        "size": "L"
+      }
+    },
+    {
+      "id": "cl5003",
+      "name": "Denim Jeans 3",
+      "price": 1499,
+      "brand": "UrbanStyle",
+      "description": "Blue denim jeans",
+      "specifications": {
+        "size": "32"
+      }
+    },
+    {
+      "id": "cl5004",
+      "name": "Hoodie 4",
+      "price": 1999,
+      "brand": "StreetWear",
+      "description": "Winter hoodie",
+      "specifications": {
+        "size": "XL"
+      }
+    },
+    {
+      "id": "cl5005",
+      "name": "Formal Shirt 5",
+      "price": 1299,
+      "brand": "OfficePro",
+      "description": "Slim fit shirt",
+      "specifications": {
+        "size": "L"
+      }
+    }
+  ],
+  "accessories": [
+    {
+      "id": "ac6001",
+      "name": "Wireless Earbuds 1",
+      "price": 2499,
+      "brand": "SoundMax",
+      "description": "Bluetooth earbuds",
+      "specifications": {
+        "battery": "20h"
+      }
+    },
+    {
+      "id": "ac6002",
+      "name": "PowerBank 2",
+      "price": 1499,
+      "brand": "ChargeUp",
+      "description": "10000mAh powerbank",
+      "specifications": {
+        "capacity": "10000mAh"
+      }
+    },
+    {
+      "id": "ac6003",
+      "name": "Smart Watch 3",
+      "price": 3999,
+      "brand": "Nova",
+      "description": "Fitness smartwatch",
+      "specifications": {
+        "battery": "7 days"
+      }
+    },
+    {
+      "id": "ac6004",
+      "name": "Laptop Bag 4",
+      "price": 1299,
+      "brand": "CarryPro",
+      "description": "15 inch laptop bag",
+      "specifications": {
+        "size": "15inch"
+      }
+    },
+    {
+      "id": "ac6005",
+      "name": "Bluetooth Speaker 5",
+      "price": 2999,
+      "brand": "SoundMax",
+      "description": "Portable speaker",
+      "specifications": {
+        "battery": "10h"
+      }
+    }
+  ]
+}

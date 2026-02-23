@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, UploadFile, File, Depends, Request
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.services.operations import UploadService
@@ -59,7 +59,7 @@ async def upload_document(file: UploadFile = File(...), db: Session = Depends(ge
 
 
 @router.post("/text", response_model=UploadResponse)
-async def upload_text(request: TextUploadRequest, db: Session = Depends(get_db)):
+async def upload_text(request: Request, db: Session = Depends(get_db)):
     """
     Upload text content directly for RAG processing
     
@@ -68,15 +68,38 @@ async def upload_text(request: TextUploadRequest, db: Session = Depends(get_db))
     - Stores vectors in FAISS and metadata in SQLite
     """
     try:
+        # Attempt to parse JSON body first (standard Swagger/JSON clients)
+        text_value = None
+        description = None
+
+        try:
+            body = await request.json()
+            if isinstance(body, dict):
+                text_value = body.get("text")
+                description = body.get("description")
+        except Exception:
+            # JSON decode failed (likely because raw multiline text sent); fall back
+            raw = await request.body()
+            if raw:
+                try:
+                    raw_text = raw.decode("utf-8")
+                except Exception:
+                    raw_text = raw.decode("utf-8", errors="ignore")
+                # If body looks like a JSON string but failed parsing, try to strip quotes
+                text_value = raw_text
+
         # Use description as filename if provided, otherwise generate one
-        filename = request.description or "text_upload"
+        filename = description or "text_upload"
         if not filename.endswith(".txt"):
             filename = f"{filename}.txt"
-        
+
         logger.info(f"Received text upload request: {filename}")
-        
+
+        if not text_value:
+            raise ValueError("No text provided in request body")
+
         # Process text upload
-        result = UploadService.process_text_upload(request.text, filename, db)
+        result = UploadService.process_text_upload(text_value, filename, db)
         
         if not result["success"]:
             return UploadResponse(

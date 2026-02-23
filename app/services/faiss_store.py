@@ -6,6 +6,8 @@ from typing import List, Tuple
 from pathlib import Path
 from app.core.config import FAISS_INDEX_PATH, FAISS_DIMENSION, FAISS_INDEX_TYPE, FAISS_NLIST
 from app.core.logging_config import logger
+from app.db.database import SessionLocal
+from app.db.models import Chunk
 
 
 class FAISSStore:
@@ -140,7 +142,9 @@ class FAISSStore:
             
             # Convert to output format
             distances = distances[0].tolist()
-            doc_ids = [self.id_map.get(idx, f"unknown_{idx}") for idx in indices[0].tolist()]
+            # Map numeric FAISS indices back to stored doc_id strings (format: "docid_chunkindex").
+            # If missing, return a parsable fallback "0_<idx>" so downstream code can handle it.
+            doc_ids = [self.id_map.get(idx, f"0_{idx}") for idx in indices[0].tolist()]
             
             logger.info(f"FAISS search returned {len(doc_ids)} results with distances: {distances}")
             return distances, doc_ids
@@ -164,6 +168,23 @@ class FAISSStore:
         try:
             self.index = faiss.read_index(str(self.index_path))
             logger.info(f"Loaded FAISS index from {self.index_path} (total vectors: {self.index.ntotal})")
+            # Try to rebuild id_map from DB-stored chunk faiss_id values so mappings persist across restarts
+            try:
+                session = SessionLocal()
+                try:
+                    rows = session.query(Chunk).filter(Chunk.faiss_id != None).all()
+                    for row in rows:
+                        try:
+                            fid = int(row.faiss_id)
+                            key = f"{row.document_id}_{row.chunk_index}"
+                            self.id_map[fid] = key
+                        except Exception:
+                            continue
+                    logger.info(f"Rebuilt FAISS id_map from DB with {len(self.id_map)} entries")
+                finally:
+                    session.close()
+            except Exception as e:
+                logger.warning(f"Failed to rebuild FAISS id_map from DB: {e}")
         except Exception as e:
             logger.error(f"Error loading FAISS index: {str(e)}")
             # Create new index if loading fails

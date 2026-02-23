@@ -13,7 +13,13 @@ load_env_variables()
 ensure_directories()
 
 # Import after environment setup
-from app.main import app
+# Keep legacy utils but point to new src FastAPI app
+from app.utils import load_env_variables  # keep for env loading
+try:
+    from src.main import app
+except Exception:
+    # fallback to legacy app if new app not yet ready
+    from app.main import app
 
 if __name__ == "__main__":
     import uvicorn
@@ -23,9 +29,9 @@ if __name__ == "__main__":
     port = int(os.getenv("PORT", "8000"))
     reload = os.getenv("ENVIRONMENT") == "development"
     
-    # Run server
+    # Run server (prefer new src.main)
     uvicorn.run(
-        "app.main:app",
+        "src.main:app",
         host=host,
         port=port,
         reload=reload,
