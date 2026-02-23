@@ -83,12 +83,6 @@ def docker_status():
     return True
 
 
-def docker_health():
-    """Check health status"""
-    print_header("Health Check")
-    run_command("curl -s http://localhost:8000/health | python -m json.tool", "Checking API health...")
-    return True
-
 
 def docker_stats():
     """Show container statistics"""
@@ -138,7 +132,7 @@ def show_menu():
     print("  5. 📋 View logs")
     print("  6. 💻 Open container shell")
     print("  7. 📊 Check container status")
-    print("  8. 💚 Health check")
+    # print("  8. 💚 Health check")
     print("  9. 📈 Container statistics")
     print(" 10. 🧹 Cleanup Docker resources")
     print(" 11. 💾 Database information")

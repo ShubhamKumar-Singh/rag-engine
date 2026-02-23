@@ -105,7 +105,6 @@ def main():
         print("  python run.py\n")
         print("Then access:")
         print("  - API docs: http://127.0.0.1:8000/docs")
-        print("  - Health check: http://127.0.0.1:8000/health\n")
     else:
         print("❌ Some checks failed. Please fix the issues above.\n")
         print("Installation steps:")

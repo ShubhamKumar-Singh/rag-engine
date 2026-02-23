@@ -75,12 +75,3 @@ class IndexStats(BaseModel):
     class Config:
         from_attributes = True
 
-
-class HealthCheck(BaseModel):
-    """Health check response"""
-    status: str
-    message: str
-    database_initialized: bool
-    faiss_initialized: bool
-    embeddings_backend: str
-    llm_backend: str
